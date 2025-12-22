@@ -24,6 +24,9 @@ function WHICH_KEY(mappings, opts)
 	require("which-key").register(mappings, opts)
 end
 
+-- Makes Telescope wrap long lines instead of cutting them
+vim.cmd("autocmd User TelescopePreviewerLoaded setlocal wrap")
+
 require("config.lazy")
 require("config.remap")
 require("config.set")

@@ -25,16 +25,16 @@ require("mason").setup({
 })
 require("mason-lspconfig").setup({
 	ensure_installed = {
-		"pyright",
-		"bashls",
-		"dockerls",
-		"docker_compose_language_service",
-		"jsonls",
+        "pyright",
+		--"bashls",
+		--"dockerls",
+		--"docker_compose_language_service",
+		--"jsonls",
 		"lua_ls",
-		"marksman", --markdown
-		"sqlls",
-		"taplo", --TOML
-		"intelephense",
+		--"marksman", --markdown
+        --"sqlls",
+		--"taplo", --TOML
+		--"intelephense",
 		--"gopls",
 		--"terraformls",
 		--"emmet-language-server",
@@ -51,20 +51,19 @@ require("mason-lspconfig").setup({
 				capabilities = capabilities,
 			})
 		end,
-		["lua_ls"] = function()
-			local lspconfig = require("lspconfig")
-			lspconfig.lua_ls.setup({
-				capabilities = capabilities,
-				settings = {
-					Lua = {
-						diagnostics = {
-							globals = { "vim" },
-						},
-					},
-				},
-			})
-		end,
-		--["ruff"] = function()
+            ['lua_ls'] = function()
+            local lspconfig = require("lspconfig")
+            lspconfig.lua_ls.setup {
+                settings = {
+                    Lua = {
+                        diagnostics = {
+                            globals = { 'vim' },
+                        },
+                    },
+                },
+            }
+        end,
+        --["ruff"] = function()
 		--local lspconfig = require("lspconfig")
 		--lspconfig.ruff.setup({
 		--capabilities = capabilities,

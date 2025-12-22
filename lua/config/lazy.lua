@@ -39,12 +39,7 @@ local plugins = {
 	{ "catppuccin/vim", name = "catppuccin" },
 	"rebelot/kanagawa.nvim",
     { "ellisonleao/gruvbox.nvim", priority = 1000 , config = true, opts = ...},
-	--{
-	--"lukas-reineke/indent-blankline.nvim",
-	--dependencies = {
-	--"TheGLander/indent-rainbowline.nvim",
-	--},
-	--},
+    { "folke/tokyonight.nvim", priority = 1000 , config = true, opts = ...},
 
 	-- Trees
 	"nvim-tree/nvim-tree.lua",
@@ -71,9 +66,29 @@ local plugins = {
 	"nvimdev/lspsaga.nvim",
 	{ "folke/trouble.nvim", dependencies = { "nvim-tree/nvim-web-devicons" } },
 	"ray-x/lsp_signature.nvim",
-
+    {
+        "folke/lazydev.nvim",
+        ft = "lua", -- only load on lua files
+        opts = {
+          library = {
+            -- See the configuration section for more details
+            -- Load luvit types when the `vim.uv` word is found
+            { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+          },
+        },
+      },
+      { -- optional cmp completion source for require statements and module annotations
+        "hrsh7th/nvim-cmp",
+        opts = function(_, opts)
+          opts.sources = opts.sources or {}
+          table.insert(opts.sources, {
+            name = "lazydev",
+            group_index = 0, -- set group index to 0 to skip loading LuaLS completions
+          })
+        end,
+      },
     -- C# LSP (not managed through mason-lspconfig)
-    { 
+    {
         "seblyng/roslyn.nvim",
     ---@module 'roslyn.config'
     ---@type RoslynNvimConfig
@@ -116,17 +131,17 @@ local plugins = {
 		},
 	},
 	"tpope/vim-fugitive",
-	--"APZelos/blamer.nvim",
+    "APZelos/blamer.nvim",
 	"lewis6991/gitsigns.nvim",
 	{ "sindrets/diffview.nvim", dependencies = { "nvim-tree/nvim-web-devicons" } },
-	{
-		"pwntester/octo.nvim",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"nvim-telescope/telescope.nvim",
-			"nvim-tree/nvim-web-devicons",
-		},
-	},
+    --{
+        --"pwntester/octo.nvim",
+        --dependencies = {
+            --"nvim-lua/plenary.nvim",
+            --"nvim-telescope/telescope.nvim",
+            --"nvim-tree/nvim-web-devicons",
+        --},
+    --},
 	--"topaxi/gh-actions.nvim",
 
 	-- Add persistence to files
@@ -150,10 +165,10 @@ local plugins = {
 		"nvim-neotest/neotest",
 		dependencies = {
 			"nvim-neotest/nvim-nio",
-			"nvim-neotest/neotest-jest",
 			"nvim-lua/plenary.nvim",
 			"antoinemadec/FixCursorHold.nvim",
 			"nvim-treesitter/nvim-treesitter",
+            "Issafalcon/neotest-dotnet",
 		},
 	},
 
@@ -165,10 +180,12 @@ local plugins = {
 		"iamcco/markdown-preview.nvim",
 		version = "v0.0.10",
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-		build = "cmd /c \"cd app && yarn install\"",
-		init = function()
-			vim.g.mkdp_filetypes = { "markdown" }
-		end,
+		build = function()
+        vim.fn["mkdp#util#install"]()
+        end,
+        init = function()
+            vim.g.mkdp_filetypes = { "markdown" }
+        end,
 		ft = { "markdown" },
 	},
 	{
@@ -218,6 +235,10 @@ local plugins = {
 		"chrisgrieser/nvim-scissors",
 		dependencies = "nvim-telescope/telescope.nvim", -- if using telescope
 	},
+
+    --{
+        --{'akinsho/toggleterm.nvim', version = "*", config = true}
+    --},
 }
 
 require("lazy").setup(plugins, {

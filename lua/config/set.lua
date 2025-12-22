@@ -37,6 +37,18 @@ vim.opt.splitbelow = true -- split horizontal window to the bottom
 vim.g.diagnostics_active = false
 
 -- Set default colorscheme
-vim.cmd("colorscheme gruvbox")
+vim.cmd("colorscheme tokyonight")
 
+vim.g.clipboard = {
+  name = "WslClipboard",
+  copy = {
+    ["+"] = "clip.exe",
+    ["*"] = "clip.exe",
+  },
+  paste = {
+    ["+"] = 'powershell.exe -NoLogo -NoProfile -c [Console]::Out.Write($(Get-Clipboard -Raw).ToString().Replace("`r", ""))',
+    ["*"] = 'powershell.exe -NoLogo -NoProfile -c [Console]::Out.Write($(Get-Clipboard -Raw).ToString().Replace("`r", ""))',
+  },
+  cache_enabled = 0,
+}
 

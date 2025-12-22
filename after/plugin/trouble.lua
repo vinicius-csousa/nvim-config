@@ -3,7 +3,7 @@ require("trouble").setup({
 	height = 10, -- height of the trouble list when position is top or bottom
 	width = 50, -- width of the list when position is left or right
 	--icons = true, -- use devicons for filenames
-	mode = "workspace_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
+	mode = "document_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
 	severity = vim.diagnostic.severity.ERROR, -- nil (ALL) or vim.diagnostic.severity.ERROR | WARN | INFO | HINT
 	fold_open = "", -- icon used for open folds
 	fold_closed = "", -- icon used for closed folds
@@ -56,18 +56,32 @@ require("trouble").setup({
 
 -- Lua
 VKSN("<leader>tt", function()
-	require("trouble").toggle("diagnostics", { filter = { buf = 0 } })
+	require("trouble").toggle({ mode = "diagnostics", filter = { buf = 0 } })
 end, "Current file diagnostics")
-VKSN("<leader>ta", function()
-	require("trouble").toggle("diagnostics")
-end, "All diagnostics")
+
+VKSN("<leader>tw", function()
+	require("trouble").toggle({ mode = "diagnostics" })
+end, "Workspace diagnostics")
+
 VKSN("<leader>tq", function()
-	require("trouble").toggle("quickfix")
+	require("trouble").toggle({ mode = "qflist" })
 end, "Quickfix")
+
 VKSN("<leader>tl", function()
-	require("trouble").toggle("loclist")
+	require("trouble").toggle({ mode = "loclist" })
 end, "Loclist")
 
+-- Enable inline diagnostics near the error
+local diagnostics_visible = false
+VKSN("<leader>td", function()
+  diagnostics_visible = not diagnostics_visible
+  vim.diagnostic.config({ virtual_text = diagnostics_visible })
+  vim.notify(
+    string.format("Inline diagnostics: %s", diagnostics_visible and "ON" or "OFF"),
+    vim.log.levels.INFO
+  )
+end, "Toggle inline diagnostics")
+
 WHICH_KEY({
-	["<leader>t"] = { name = "+Trouble diagnostics" },
+	["<leader>t"] = { name = "+Trouble" },
 })

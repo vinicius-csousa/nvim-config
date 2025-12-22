@@ -12,7 +12,7 @@ require("telescope").setup({
 			"--column",
 			"--smart-case",
 		},
-		prompt_prefi = "   ",
+        prompt_prefix = "   ",
 		selection_caret = "  ",
 		entry_prefix = "  ",
 		initial_mode = "insert",
